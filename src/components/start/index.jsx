@@ -112,7 +112,7 @@ export const SideRightPane = () => {
   const siderightpane = useSelector((state) => state.siderightpane);
   const setting = useSelector((state) => state.setting);
   const tasks = useSelector((state) => state.taskbar);
-  console.log('=============siderightpane===============');
+  console.log("=============siderightpane===============");
   console.log(siderightpane, setting, tasks);
   const [pnstates, setPnstate] = useState([]);
   const dispatch = useDispatch();
@@ -193,7 +193,7 @@ export const SideRightPane = () => {
     <div
       className="sidePane actmenu dpShad"
       data-hide={siderightpane.hide}
-      style={{ "--prefix": "PANE", "width": "auto" }}
+      style={{ "--prefix": "PANE", width: "auto" }}
     >
       <div className="gap-0 p-1 pb-2">
         {/* <div className="qkCont">
@@ -223,22 +223,14 @@ export const SideRightPane = () => {
 
         <div className="menuopt">
           <Icon className="mx-2 spcont" src="wifi" width={16} />
-          <text
-            id="brightnessSlider"
-            className="nopt"
-            onChange={setBrightness}
-          >
+          <text id="brightnessSlider" className="nopt" onChange={setBrightness}>
             诊断网络问题
           </text>
         </div>
 
         <div className="menuopt">
           <Icon className="mx-2 spcont" src="wifi" ui width={16} />
-          <text
-            id="brightnessSlider"
-            className="nopt"
-            onChange={setBrightness}
-          >
+          <text id="brightnessSlider" className="nopt" onChange={setBrightness}>
             网络和Internet设置
           </text>
         </div>
@@ -246,7 +238,6 @@ export const SideRightPane = () => {
     </div>
   );
 };
-
 
 // 状态栏点击弹窗面板
 export const SidePane = () => {
@@ -257,7 +248,7 @@ export const SidePane = () => {
   const dispatch = useDispatch();
 
   let [btlevel, setBtLevel] = useState("");
-  const childToParent = () => { };
+  const childToParent = () => {};
 
   const clickDispatch = (event) => {
     var action = {

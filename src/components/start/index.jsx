@@ -107,7 +107,148 @@ export const BandPane = () => {
     </div>
   );
 };
+// 状态栏右击弹窗面板
+export const SideRightPane = () => {
+  const siderightpane = useSelector((state) => state.siderightpane);
+  const setting = useSelector((state) => state.setting);
+  const tasks = useSelector((state) => state.taskbar);
+  console.log('=============siderightpane===============');
+  console.log(siderightpane, setting, tasks);
+  const [pnstates, setPnstate] = useState([]);
+  const dispatch = useDispatch();
 
+  const clickDispatch = (event) => {
+    var action = {
+      type: event.target.dataset.action,
+      payload: event.target.dataset.payload,
+    };
+
+    // 如果是小写或混合大小写，它会调用 Actions 对象中与 action.type 相对应的函数
+    if (action.type) {
+      if (action.type != action.type.toUpperCase()) {
+        Actions[action.type](action.payload);
+      } else dispatch(action);
+    }
+    // For battery saver
+    if (action.payload === "system.power.saver.state") setBrightness();
+  };
+  const bSlider = document.querySelector(".bSlider");
+
+  function sliderBackground(elem, e) {
+    elem.style.setProperty(
+      "--track-color",
+      `linear-gradient(90deg, var(--clrPrm) ${e - 3}%, #888888 ${e}%)`,
+    );
+  }
+
+  const setBrightness = (e) => {
+    var brgt = document.getElementById("brightnessSlider").value;
+    if (!e) {
+      // Battery saver
+      const state = setting.system.power.saver.state;
+      const factor = state ? 0.7 : 100 / 70;
+      const newBrgt = brgt * factor;
+      setBrightnessValue(newBrgt);
+      document.getElementById("brightnessSlider").value = newBrgt;
+    } else {
+      // Brightness slider
+      setBrightnessValue(brgt);
+    }
+  };
+
+  function setBrightnessValue(brgt) {
+    document.getElementById("brightoverlay").style.opacity = (100 - brgt) / 100;
+    dispatch({
+      type: "STNGSETV",
+      payload: {
+        path: "system.display.brightness",
+        value: brgt,
+      },
+    });
+    sliderBackground(bSlider, brgt);
+  }
+
+  useEffect(() => {
+    siderightpane.actions.map((item, i) => {
+      if (item.src == "nightlight") {
+        if (pnstates[i]) document.body.dataset.sepia = true;
+        else document.body.dataset.sepia = false;
+      }
+    });
+  });
+
+  useEffect(() => {
+    // console.log("ok")
+    var tmp = [];
+    for (var i = 0; i < siderightpane.actions.length; i++) {
+      var val = getTreeValue(setting, siderightpane.actions[i].state);
+      if (siderightpane.actions[i].name == "Theme") val = val == "dark";
+      tmp.push(val);
+    }
+
+    setPnstate(tmp);
+  }, [setting, siderightpane]);
+
+  return (
+    <div
+      className="sidePane actmenu dpShad"
+      data-hide={siderightpane.hide}
+      style={{ "--prefix": "PANE", "width": "auto" }}
+    >
+      <div className="gap-0 p-1 pb-2">
+        {/* <div className="qkCont">
+          {siderightpane.actions.map((qk, idx) => {
+            return (
+              <div key={idx} className="qkGrp">
+                <div
+                  className="qkbtn handcr prtclk"
+                  onClick={clickDispatch}
+                  data-action={qk.action}
+                  data-payload={qk.payload || qk.state}
+                  data-state={pnstates[idx]}
+                >
+                  <Icon
+                    className="quickIcon"
+                    ui={qk.ui}
+                    src={qk.src}
+                    width={14}
+                    invert={pnstates[idx] ? true : null}
+                  />
+                </div>
+                <div className="qktext">{qk.name}</div>
+              </div>
+            );
+          })}
+        </div> */}
+
+        <div className="menuopt">
+          <Icon className="mx-2 spcont" src="wifi" width={16} />
+          <text
+            id="brightnessSlider"
+            className="nopt"
+            onChange={setBrightness}
+          >
+            诊断网络问题
+          </text>
+        </div>
+
+        <div className="menuopt">
+          <Icon className="mx-2 spcont" src="wifi" ui width={16} />
+          <text
+            id="brightnessSlider"
+            className="nopt"
+            onChange={setBrightness}
+          >
+            网络和Internet设置
+          </text>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+// 状态栏点击弹窗面板
 export const SidePane = () => {
   const sidepane = useSelector((state) => state.sidepane);
   const setting = useSelector((state) => state.setting);
@@ -116,7 +257,7 @@ export const SidePane = () => {
   const dispatch = useDispatch();
 
   let [btlevel, setBtLevel] = useState("");
-  const childToParent = () => {};
+  const childToParent = () => { };
 
   const clickDispatch = (event) => {
     var action = {
@@ -124,6 +265,7 @@ export const SidePane = () => {
       payload: event.target.dataset.payload,
     };
 
+    // 如果是小写或混合大小写，它会调用 Actions 对象中与 action.type 相对应的函数
     if (action.type) {
       if (action.type != action.type.toUpperCase()) {
         Actions[action.type](action.payload);
@@ -208,7 +350,7 @@ export const SidePane = () => {
       data-hide={sidepane.hide}
       style={{ "--prefix": "PANE" }}
     >
-      <div className="quickSettings p-5 pb-8">
+      <div className="p-5 pb-8 quickSettings">
         <div className="qkCont">
           {sidepane.quicks.map((qk, idx) => {
             return (
@@ -266,6 +408,7 @@ export const SidePane = () => {
   );
 };
 
+// 日历面板
 export const CalnWid = () => {
   const sidepane = useSelector((state) => state.sidepane);
   const [loaded, setLoad] = useState(false);
@@ -296,7 +439,7 @@ export const CalnWid = () => {
       data-hide={sidepane.calhide}
       style={{ "--prefix": "CALN" }}
     >
-      <div className="topBar pl-4 text-sm">
+      <div className="pl-4 text-sm topBar">
         <div className="date">
           {new Date().toLocaleDateString(undefined, {
             weekday: "long",
@@ -304,7 +447,7 @@ export const CalnWid = () => {
             day: "numeric",
           })}
         </div>
-        <div className="collapser p-2 m-4 rounded" onClick={collapseToggler}>
+        <div className="p-2 m-4 rounded collapser" onClick={collapseToggler}>
           {collapse === "" ? (
             <Icon fafa="faChevronDown" />
           ) : (

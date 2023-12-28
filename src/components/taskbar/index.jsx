@@ -52,6 +52,17 @@ const Taskbar = () => {
     }
   };
 
+  const clickRightDispatch = (event) => {
+    var action = {
+      type: event.target.dataset.rightAction,
+      payload: event.target.dataset.payload,
+    };
+
+    if (action.type) {
+      dispatch(action);
+    }
+  };
+
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -66,6 +77,7 @@ const Taskbar = () => {
       <div className="taskcont">
         <div className="tasksCont" data-menu="task" data-side={tasks.align}>
           <div className="tsbar" onMouseOut={hidePrev}>
+            {/* win */}
             <Icon className="tsIcon" src="home" width={24} click="STARTOGG" />
             {tasks.search ? (
               <Icon
@@ -74,6 +86,7 @@ const Taskbar = () => {
                 icon="taskSearch"
               />
             ) : null}
+            {/* 左侧面板 */}
             {tasks.widgets ? (
               <Icon
                 className="tsIcon widget"
@@ -130,17 +143,20 @@ const Taskbar = () => {
             })}
           </div>
         </div>
+        {/* 右侧任务栏 */}
         <div className="taskright">
           <div
-            className="px-2 prtclk handcr hvlight flex"
+            className="flex px-2 prtclk handcr hvlight"
             onClick={clickDispatch}
             data-action="BANDTOGG"
           >
             <Icon fafa="faChevronUp" width={10} />
           </div>
           <div
-            className="prtclk handcr my-1 px-1 hvlight flex rounded"
+            className="flex px-1 my-1 rounded prtclk handcr hvlight"
             onClick={clickDispatch}
+            onContextMenu={clickRightDispatch}
+            data-right-action="PANERIGHTTOGG"
             data-action="PANETOGG"
           >
             <Icon className="taskIcon" src="wifi" ui width={16} />
@@ -154,7 +170,7 @@ const Taskbar = () => {
           </div>
 
           <div
-            className="taskDate m-1 handcr prtclk rounded hvlight"
+            className="m-1 rounded taskDate handcr prtclk hvlight"
             onClick={clickDispatch}
             data-action="CALNTOGG"
           >
@@ -172,7 +188,7 @@ const Taskbar = () => {
               })}
             </div>
           </div>
-          <Icon className="graybd my-4" ui width={6} click="SHOWDSK" pr />
+          <Icon className="my-4 graybd" ui width={6} click="SHOWDSK" pr />
         </div>
       </div>
     </div>

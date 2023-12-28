@@ -10,6 +10,7 @@ import {
   CalnWid,
   DesktopApp,
   SidePane,
+  SideRightPane,
   StartMenu,
   WidPane,
 } from "./components/start";
@@ -85,7 +86,7 @@ function App() {
     var actionType = "";
     try {
       actionType = event.target.dataset.action || "";
-    } catch (err) {}
+    } catch (err) { }
 
     var actionType0 = getComputedStyle(event.target).getPropertyValue(
       "--prefix",
@@ -161,6 +162,7 @@ function App() {
             <StartMenu />
             <BandPane />
             <SidePane />
+            <SideRightPane />
             <WidPane />
             <CalnWid />
           </div>

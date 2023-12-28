@@ -109,6 +109,7 @@ export const Icon = (props) => {
         data-active={props.active}
         data-payload={props.payload}
         onClick={props.onClick || (props.pr && clickDispatch) || null}
+        onContextMenu={props.onContextMenu || null}
         data-menu={props.menu}
         data-pr={props.pr}
       >
@@ -406,7 +407,7 @@ export const ToolBar = (props) => {
         }}
       >
         <div
-          className="topInfo flex flex-grow items-center"
+          className="flex items-center flex-grow topInfo"
           data-float={props.float != null}
           onClick={toolClick}
           onMouseDown={toolDrag}
@@ -420,7 +421,7 @@ export const ToolBar = (props) => {
             {props.name}
           </div>
         </div>
-        <div className="actbtns flex items-center">
+        <div className="flex items-center actbtns">
           <Icon
             invert={props.invert}
             click={props.app}
@@ -431,7 +432,7 @@ export const ToolBar = (props) => {
             width={12}
           />
           <div
-            className="snapbox h-full"
+            className="h-full snapbox"
             data-hv={snap}
             onMouseOver={openSnap}
             onMouseLeave={closeSnap}
